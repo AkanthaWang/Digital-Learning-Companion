@@ -1,12 +1,11 @@
-# src/pipeline/conversation.py
 """
-对话流程控制模块（本地 EmotiVoiceTTS 版，最小侵入修复）
-- 使用 src/tts/emotivoice_local.EmotiVoiceTTS
-- 正确参数：voice / emotion
-- 返回 int16 ndarray，按 self.tts.sample_rate 保存
+实现完整的语音对话流程：
+- ASR（语音识别）
+- LLM（大语言模型对话）
+- TTS（语音合成）
 """
-
 import os
+import sys
 import logging
 from datetime import datetime
 from typing import Optional, Dict, Any
@@ -14,9 +13,15 @@ from typing import Optional, Dict, Any
 import numpy as np
 import soundfile as sf
 
+# 将 src 目录添加到 sys.path 中
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from src.asr import FunASRModule
 from src.llm import LLMInterface
 from src.tts import EmotiVoiceTTS
+# from .asr import FunASRModule
+# from .llm import LLMInterface
+# from .tts import EmotiVoiceTTS
 
 logger = logging.getLogger(__name__)
 
