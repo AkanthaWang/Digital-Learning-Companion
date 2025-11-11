@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 # 初始化 LLM 配置
 llm_config = {
     "provider": "deepseek",  # 使用 DeepSeek 或 Qwen
-    "system_prompt": "你是一个友好的智能助手。",
+    "system_prompt": "数字学伴。",
     "deepseek": {
         "api_key": "your_deepseek_api_key",
         "base_url": "https://api.deepseek.com",
