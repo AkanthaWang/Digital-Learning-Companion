@@ -1,0 +1,92 @@
+# 智能学伴系统配置文件
+
+# ASR配置 (FunASR)
+asr:
+  model_name: "paraformer-zh"  # FunASR模型名称：paraformer-zh, paraformer-zh-streaming, sensevoice
+  model_revision: "v2.0.4"     # 模型版本
+  device: "cuda"               # cuda 或 cpu（自动检测）
+  batch_size: 1                # 批处理大小
+  sample_rate: 16000           # 音频采样率
+  hotword: ""                  # 热词，可提高特定词汇识别率（空格分隔）
+  use_itn: true                # 是否使用逆文本归一化
+  hub: "ms"                    # 模型仓库来源：ms(ModelScope) 或 hf(HuggingFace)
+  
+  # VAD配置（可选，自动语音活动检测）
+  # vad_model: "fsmn-vad"       # 启用VAD
+  # vad_kwargs:
+  #   max_single_segment_time: 60000  # 最大单段时长(ms)
+  
+  # 标点恢复配置（可选）
+  # punc_model: "ct-punc"       # 启用标点恢复
+  # punc_kwargs: {}
+  
+# LLM配置
+llm:
+  provider: "deepseek"  # deepseek, qwen, 或其他
+  
+  # DeepSeek配置（硅基流动）
+  deepseek:
+    api_key: "sk-tkaueyfnpujwimynfvxouwgjlapnwbsnlzrqvqcjdocomwgs"  # 硅基流动 API Key
+    base_url: "https://api.siliconflow.cn"  # 硅基流动API地址
+    model: "deepseek-ai/DeepSeek-V3"  # DeepSeek-V3模型
+    temperature: 0.7
+    max_tokens: 2000
+    top_p: 0.95
+  
+  # 系统提示词
+  system_prompt: |
+    你是一个友好、耐心的智能学伴助手。你的任务是：
+    1. 用简洁、清晰的语言回答学生的问题
+    2. 鼓励学生独立思考，而不是直接给出答案
+    3. 用循序渐进的方式引导学习
+    4. 保持积极、鼓励的语气
+    5. 如果问题超出你的能力范围，诚实地告知
+    请用自然、口语化的方式回答，避免过长的回复（建议控制在100字以内）。
+
+# TTS配置 (EmotiVoice)
+# 使用本地已下载的 EmotiVoice 模型
+tts:
+  # 使用本地模式（推荐，使用已下载的模型）
+  use_local: true  # true=本地模式，false=从 ModelScope 自动下载
+
+  # 本地模型路径（指向已下载的EmotiVoice模型目录）
+  model_path: "models/EmotiVoice"  # 修改为您的本地EmotiVoice模型目录
+
+  # 语音生成相关配置
+  device: "cuda"  # cuda 或 cpu（自动检测）
+  speaker_id: "7556"  # 使用克隆的音色ID（7556是示例，替换为实际音色ID）
+  speed: 1.0      # 语速：0.5-2.0
+  pitch: 1.0      # 音高：0.5-2.0（官方模型可能不支持）
+  sample_rate: 22050  # 采样率
+  emotion: "neutral"  # 默认情感
+
+  # 默认参考音频路径（EmotiVoice 必需）
+  # 如果需要，您可以使用一个参考音频文件（例如您自己录制的音频）
+  default_reference_audio: "emotivoice-tts/examples/test_voice.wav"
+  
+
+  
+# 对话管道配置
+conversation:
+  max_history: 10  # 最大对话历史轮数
+  save_audio: true  # 是否保存音频
+  audio_output_dir: "data/audio_output"
+  audio_input_dir: "data/audio_input"
+  log_dir: "data/logs"
+  enable_vad: true  # 是否启用语音活动检测
+  vad_threshold: 0.5
+
+# 日志配置
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "data/logs/system.log"
+  max_bytes: 10485760  # 10MB
+  backup_count: 5
+
+# 性能配置
+performance:
+  use_fp16: true  # 使用半精度加速（需要GPU支持）
+  num_workers: 4  # 数据加载线程数
+  prefetch_factor: 2
+

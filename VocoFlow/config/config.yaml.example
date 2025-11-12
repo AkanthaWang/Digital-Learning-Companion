@@ -1,0 +1,110 @@
+# 智能学伴系统配置文件示例
+# 
+# 使用方法：
+# 1. 复制此文件为 config.yaml：cp config.yaml.example config.yaml
+# 2. 填入你的真实 API Key 和其他配置
+# 3. 注意：config.yaml 不会被提交到 Git（已在 .gitignore 中排除）
+
+# ASR配置 (FunASR)
+asr:
+  model_name: "paraformer-zh"  # FunASR模型名称：paraformer-zh, paraformer-zh-streaming, sensevoice
+  model_revision: "v2.0.4"     # 模型版本
+  device: "cuda"               # cuda 或 cpu（自动检测）
+  batch_size: 1                # 批处理大小
+  sample_rate: 16000           # 音频采样率
+  hotword: ""                  # 热词，可提高特定词汇识别率（空格分隔）
+  use_itn: true                # 是否使用逆文本归一化
+  hub: "ms"                    # 模型仓库来源：ms(ModelScope) 或 hf(HuggingFace)
+  
+  # VAD配置（可选，自动语音活动检测）
+  # vad_model: "fsmn-vad"       # 启用VAD
+  # vad_kwargs:
+  #   max_single_segment_time: 60000  # 最大单段时长(ms)
+  
+  # 标点恢复配置（可选）
+  # punc_model: "ct-punc"       # 启用标点恢复
+  # punc_kwargs: {}
+
+# LLM配置
+llm:
+  provider: "deepseek"  # deepseek, qwen, 或其他
+  
+  # DeepSeek配置（硅基流动）
+  deepseek:
+    api_key: "YOUR_API_KEY_HERE"  # ⚠️ 请替换为你的硅基流动 API Key
+    base_url: "https://api.siliconflow.cn/v1"  # 硅基流动API地址（注意：不要包含 /chat/completions，OpenAI客户端会自动添加）
+    model: "deepseek-ai/DeepSeek-V3"  # DeepSeek-V3模型
+    temperature: 0.7
+    max_tokens: 2000
+    top_p: 0.95
+  
+  # Qwen配置（可选）
+  # qwen:
+  #   api_key: "YOUR_QWEN_API_KEY_HERE"
+  #   base_url: "https://dashscope.aliyuncs.com/api/v1"
+  #   model: "qwen-turbo"
+  #   temperature: 0.7
+  #   max_tokens: 2000
+  #   top_p: 0.8
+  
+  # 系统提示词
+  system_prompt: |
+    你是一个友好、耐心的智能学伴助手。你的任务是：
+    1. 用简洁、清晰的语言回答学生的问题
+    2. 鼓励学生独立思考，而不是直接给出答案
+    3. 用循序渐进的方式引导学习
+    4. 保持积极、鼓励的语气
+    5. 如果问题超出你的能力范围，诚实地告知
+    请用自然、口语化的方式回答，避免过长的回复（建议控制在100字以内）。
+
+# TTS配置 (IndexTTS2)
+# 使用 ModelScope 官方 IndexTTS2 模型
+tts:
+  # ========== 模型配置 ==========
+  # 模式选择：
+  #   - 本地模式：使用已下载的本地模型（推荐，更快）
+  #   - Hub 模式：从 ModelScope 自动下载模型
+  use_local: true  # true=本地模式（需要 model_path 指向已下载的模型），false=Hub模式（自动下载）
+  
+  # 本地模型路径（本地模式必需）
+  model_path: "models/indextts2"
+  
+  # Hub 模型 ID（Hub 模式使用）
+  model: "IndexTeam/IndexTTS-2"
+  
+  # 注意：
+  # - 本地模式：确保 model_path 指向已下载的完整模型目录
+  # - Hub 模式：首次使用会自动下载约5.9GB，下载后也会使用本地缓存
+  
+  # ========== 通用配置 ==========
+  device: "cuda"  # cuda 或 cpu（自动检测）
+  speaker_id: 0   # 音色ID（官方模型通过参考音频控制）
+  speed: 1.0      # 语速：0.5-2.0
+  pitch: 1.0      # 音高：0.5-2.0（官方模型可能不支持）
+  sample_rate: 22050  # 采样率
+  emotion: "neutral"  # 默认情感
+  
+# 对话管道配置
+conversation:
+  max_history: 10  # 最大对话历史轮数
+  save_audio: true  # 是否保存音频
+  audio_output_dir: "data/audio_output"
+  audio_input_dir: "data/audio_input"
+  log_dir: "data/logs"
+  enable_vad: true  # 是否启用语音活动检测
+  vad_threshold: 0.5
+
+# 日志配置
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "data/logs/system.log"
+  max_bytes: 10485760  # 10MB
+  backup_count: 5
+
+# 性能配置
+performance:
+  use_fp16: true  # 使用半精度加速（需要GPU支持）
+  num_workers: 4  # 数据加载线程数
+  prefetch_factor: 2
+
