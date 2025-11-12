@@ -104,6 +104,18 @@
    - 如果配置了API Key，会测试LLM对话
 ---
 
+7. **开始使用**
+   ```bash
+   # 交互式模式
+   python main.py --mode interactive
+   
+   # 单文件模式
+   python main.py --mode single --input data/audio_input/your_audio.wav
+   
+   # 批处理模式
+   python main.py --mode batch --input audio_directory/
+   ```
+
 ## ⚙️ 系统配置示例 (Configuration Overview)
 
 项目的主要模块可通过 config/config.yaml 文件进行统一管理。  
