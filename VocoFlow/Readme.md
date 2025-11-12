@@ -19,16 +19,9 @@
 
 ## 🏗️ 系统架构
 
-语音输入 (wav/mp3)
-   ↓
-FunASR (ASR语音识别)
-   ↓
-DeepSeek-V3 (文本生成)
-   ↓
-EmotiVoice (情感语音合成)
-   ↓
-语音输出 (wav)
-
+语音输入(wav/mp3) → FunASR(语音识别) → DeepSeek-V3(文本生成) → IndexTTS2(语音合成) → 语音输出(wav)
+                      ↓                      ↓                         ↓
+                  中文文本              智能回复文本                音频波形
 ---
 
 ## 📦 模块说明
@@ -44,39 +37,75 @@ EmotiVoice (情感语音合成)
 
 ## 🚀 快速开始
 
-### 环境要求
-- Python ≥ 3.8  
-- CUDA 环境（推荐使用 GPU 加速）  
-- DeepSeek API Key（由硅基流动提供）  
+1. **克隆项目**
+   ```bash
+   git clone <repository_url>
+   cd LearningFriend
+   ```
 
-### 1️⃣ 克隆项目
-git clone <repository_url>
-cd LearningFriend
+2. **安装依赖**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-### 2️⃣ 安装依赖
-pip install -r requirements.txt
+3. **安装FunASR**（如果未安装）
+   ```bash
+   cd FunASR
+   pip install -e .
+   cd ..
+   ```
 
-### 3️⃣ 安装 FunASR（如未安装）
-cd FunASR
-pip install -e .
-cd ..
+4. **配置API Key**
+   
+   **首次使用**：从示例文件创建配置文件
+   ```bash
+   cp config/config.yaml.example config/config.yaml
+   ```
+   
+   然后编辑 `config/config.yaml`，填入你的 API Key：
+   ```yaml
+   llm:
+     provider: "deepseek"
+     deepseek:
+       api_key: "sk-your-api-key-here"  # ⚠️ 替换为你的硅基流动API Key
+       base_url: "https://api.siliconflow.cn/v1"
+       model: "DeepSeek/DeepSeek-V3"
+   ```
+   
+   **重要**：
+   - ✅ `config.yaml` 已添加到 `.gitignore`，不会被提交到Git
+   - ⚠️ **如果 `config.yaml` 已被 Git 跟踪**：请查看 [SECURITY.md](SECURITY.md) 了解如何安全处理
+   
+   获取API Key：访问 https://siliconflow.cn/
 
-### 4️⃣ 配置 LLM API Key
-cp config/config.yaml.example config/config.yaml
+5. **下载 TTS 模型（EmotiVoice）**
 
-修改 config/config.yaml：
-llm:
-  provider: "deepseek"
-  deepseek:
-    api_key: "sk-your-api-key"
-    base_url: "https://api.siliconflow.cn/v1"
-    model: "DeepSeek/DeepSeek-V3"
+在首次运行前，请确保 EmotiVoice 模型已正确下载。  
+可参考详细安装说明与下载链接：
 
-### 5️⃣ 测试运行
-python test_pipeline.py
+👉 [EmotiVoice/README.md](../../models/EmotiVoice/README.md)
 
-系统将自动测试 ASR、LLM 与 TTS 模块，并输出合成语音。
+如未下载，可在本项目路径下执行：
+```bash
+cd models/EmotiVoice
+bash download_emotivoice.sh   # 或参考 README 中的手动下载方式
+cd ../../
 
+
+6. **运行测试**
+   ```bash
+   python test_pipeline.py
+   ```
+   
+   这个测试会：
+   - ✓ 测试ASR模块（FunASR）
+   - ✓ 测试LLM模块（DeepSeek-V3）
+   - ✓ 测试TTS模块（IndexTTS2占位）
+   - ✓ 测试完整对话流程
+   
+   **首次运行提示**：
+   - FunASR模型会自动从ModelScope下载（约1-2GB）
+   - 如果配置了API Key，会测试LLM对话
 ---
 
 ## ⚙️ 系统配置示例 (Configuration Overview)
@@ -108,11 +137,6 @@ tts:
   speed: 1.0
   pitch: 1.0
   model_path: "models/EmotiVoice/outputs"
-
----
-
-## 🧪 端到端测试
-python test_pipeline.py
 
 ---
 
