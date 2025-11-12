@@ -27,7 +27,7 @@ git lfs clone https://github.com/netease-youdao/EmotiVoice.git models/EmotiVoice
 
 ### 2. 下载模型文件  
 按照 EmotiVoice 官方说明下载模型文件，并放入对应目录（例如 `outputs/`、`WangZeJun/` 等）。
-👉 详细的模型下载与配置流程请参考：[models/EmotiVoice/README.md](models/EmotiVoice/README.md)
+👉 详细的模型下载与配置流程请参考：[EmotiVoice/README.md](../../models/EmotiVoice/README.md)
 
 
 ---
@@ -115,22 +115,12 @@ tts.synthesize_to_file(
 
 ---
 
-## 🎙️ 获取可用说话人与情感
-
-```python
-voices = tts.get_available_voices()
-emotions = tts.get_available_emotions()
-print(voices, emotions)
-```
-
----
-
 ## ❓ 常见问题（FAQ）
 
 | 问题 | 可能原因与解决方案 |
 |------|--------------------|
-| **提示找不到模型或权重文件** | 请确认 `models/EmotiVoice/outputs/` 与 `WangZeJun/` 等目录已正确下载模型。详细下载与路径配置请参考 [models/EmotiVoice/README.md](models/EmotiVoice/README.md)。 |
-| **输出音频为空或合成异常** | 1. 确认使用的 `config.yaml` 与 `outputs/` 下模型匹配。<br>2. 检查 `voice` 是否存在于 `speaker2id.txt`。<br>3. 若输出数组为空，建议重新下载 `style_encoder` 或 `generator` 权重。 |
+| **提示找不到模型或权重文件** | 请确认 `models/EmotiVoice/outputs/` 与 `WangZeJun/` 等目录已正确下载模型。详细下载与路径配置请参考 [EmotiVoice/README.md](../../models/EmotiVoice/README.md)。 |
+| **输出音频为空或合成异常** | 1. 检查 `voice` 是否存在于 `speaker2id.txt`。<br>2. 若输出数组为空，建议重新下载 `style_encoder` 或 `generator` 权重。 |
 | **运行时报 ImportError 或 ModuleNotFoundError** | 请确认 `models/EmotiVoice` 已添加到 `sys.path`。封装代码中已自动执行此步骤，但若你移动路径，请修改 `EMOTIVOICE_ROOT` 定义。 |
 | **提示 GPU 不可用** | 可忽略，程序会自动切换到 CPU；如需使用 GPU，请安装 `torch` GPU 版本并确保 CUDA 驱动可用。 |
 | **情感或说话人设置无效** | 当前版本的情感控制依赖样式嵌入（Style Embedding），请确保传入的 `emotion` 在 `get_available_emotions()` 返回列表中。说话人 ID 需存在于 `speaker2id` 文件。 |
