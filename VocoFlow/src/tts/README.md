@@ -27,6 +27,8 @@ git lfs clone https://github.com/netease-youdao/EmotiVoice.git models/EmotiVoice
 
 ### 2. 下载模型文件  
 按照 EmotiVoice 官方说明下载模型文件，并放入对应目录（例如 `outputs/`、`WangZeJun/` 等）。
+👉 详细的模型下载与配置流程请参考：[models/EmotiVoice/README.md](models/EmotiVoice/README.md)
+
 
 ---
 
@@ -63,9 +65,7 @@ EmotiVoice/
 │   └── symbols.py
 │
 ├── frontend.py                      # 推理入口：拼音/音素前端
-├── inference_tts.py                 # 官方 TTS 推理脚本
-├── laxapi2.py                       # HTTP 推理 API（简化封装）
-└── README_小白安装教程.md           # 官方安装说明
+└── inference_tts.py                 # 官方 TTS 推理脚本
 ```
 
 > ⚠️ **注意**  
@@ -85,21 +85,21 @@ pip install torch torchaudio numpy soundfile transformers yacs
 
 ## 🧩 使用示例
 
-假设封装类名为 `EmotiVoiceTTS`（定义在 `emotivoice_local.py`）：
+封装类名为 `EmotiVoiceTTS`（定义在 `emotivoice_local.py`）：
 
 ```python
 from emotivoice_local import EmotiVoiceTTS
 
 config = {
-    "output_directory": "data/audio_output",
-    "model_config_path": "models/EmotiVoice/config/joint/config.yaml",
+    "output_directory": "data/audio_output",  # 输出路径
+    "model_config_path": "models/EmotiVoice/config/joint/config.yaml",  # 模型配置文件
     # 可选参数：
     # "token_list_path": "models/EmotiVoice/data/youdao/tokenlist",
     # "speaker2id_path": "models/EmotiVoice/data/youdao/speaker2",
 }
 
 tts = EmotiVoiceTTS(config)
-text = "你好，欢迎使用语音合成。"
+text = "你好，欢迎使用数字学伴。"
 
 # 方法 1：返回音频数据（numpy 数组）
 audio = tts.synthesize(text, voice="7556", emotion="友好的")
@@ -108,7 +108,7 @@ audio = tts.synthesize(text, voice="7556", emotion="友好的")
 tts.synthesize_to_file(
     text,
     "data/audio_output/demo.wav",
-    voice="7556",
+    voice="1050",
     emotion="友好的",
 )
 ```
@@ -125,14 +125,17 @@ print(voices, emotions)
 
 ---
 
-## ❓ 常见问题
+## ❓ 常见问题（FAQ）
 
 | 问题 | 可能原因与解决方案 |
 |------|--------------------|
-| **提示找不到模型** | 请确认 `models/EmotiVoice/outputs/...` 路径存在且模型文件完整。 |
-| **输出音频为空或异常** | 检查 `config.yaml` 是否为原始版本，`voice` 是否存在于 `speaker2id` 中。 |
-| **与 ASR / LLM 模块联动** | 可直接将 LLM 输出文本传入 `synthesize_to_file()`，生成 WAV 文件即可播放。 |
-
+| **提示找不到模型或权重文件** | 请确认 `models/EmotiVoice/outputs/` 与 `WangZeJun/` 等目录已正确下载模型。详细下载与路径配置请参考 [models/EmotiVoice/README.md](models/EmotiVoice/README.md)。 |
+| **输出音频为空或合成异常** | 1. 确认使用的 `config.yaml` 与 `outputs/` 下模型匹配。<br>2. 检查 `voice` 是否存在于 `speaker2id.txt`。<br>3. 若输出数组为空，建议重新下载 `style_encoder` 或 `generator` 权重。 |
+| **运行时报 ImportError 或 ModuleNotFoundError** | 请确认 `models/EmotiVoice` 已添加到 `sys.path`。封装代码中已自动执行此步骤，但若你移动路径，请修改 `EMOTIVOICE_ROOT` 定义。 |
+| **提示 GPU 不可用** | 可忽略，程序会自动切换到 CPU；如需使用 GPU，请安装 `torch` GPU 版本并确保 CUDA 驱动可用。 |
+| **情感或说话人设置无效** | 当前版本的情感控制依赖样式嵌入（Style Embedding），请确保传入的 `emotion` 在 `get_available_emotions()` 返回列表中。说话人 ID 需存在于 `speaker2id` 文件。 |
+| **与 ASR / LLM 模块联动失败** | 直接将 LLM 生成的文本传入 `synthesize_to_file(text, output_path)` 即可生成可播放的 WAV 文件；无需额外中间处理。 |
+| **音频文件播放异常（噪声、无声）** | 可能的原因：采样率不匹配。请确保读取时使用 `tts.sample_rate` 获取的采样率。 |
 ---
 
 ## 📜 许可证
