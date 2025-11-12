@@ -86,7 +86,7 @@
    在首次运行前，请确保 EmotiVoice 模型已正确下载。  
    可参考详细安装说明与下载链接：
 
-   👉 [EmotiVoice/README.md](../../models/EmotiVoice/README.md)
+   👉 [EmotiVoice/README.md](models/EmotiVoice/README.md)
 
 6. **运行测试**
    ```bash
