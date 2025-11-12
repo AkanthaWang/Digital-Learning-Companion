@@ -1,0 +1,50 @@
+# 核心依赖
+pyyaml
+numpy
+torch
+torchaudio
+
+# FunASR相关
+funasr==1.2.7
+modelscope==1.9.5
+
+# LLM API调用
+openai  # DeepSeek和Qwen都兼容OpenAI接口
+requests
+
+# TTS相关 - EmotiVoice依赖
+torch>=2.0.0
+torchaudio
+numpy
+numba
+scipy
+transformers
+soundfile
+yacs
+g2p_en
+jieba
+pypinyin
+pypinyin_dict
+nltk
+streamlit
+fastapi
+pydub
+uvicorn[standard]
+pyrubberband
+typing_extensions==4.8.0
+
+# 音频处理
+# pyaudio>=0.2.13  # 可选：仅在需要实时录音时使用，需要系统安装 portaudio 库
+# webrtcvad>=2.0.10  # VAD语音活动检测
+
+# 工具库
+tqdm>=4.65.0
+loguru>=0.7.0
+
+# 可选：GPU加速
+# onnxruntime-gpu>=1.15.0  # 如果使用ONNX推理
+
+# 开发工具
+pytest
+black
+flake8
