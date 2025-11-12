@@ -23,7 +23,7 @@ class LLMInterface:
         """
         self.config = config
         self.provider = config.get('provider', 'deepseek')
-        self.system_prompt = config.get('system_prompt', '你是一个友好的智能助手。')
+        self.system_prompt = config.get('system_prompt', '你是一个友好的智能助手（建议控制在60字以内）。')
         
         # 对话历史
         self.conversation_history: List[Dict[str, str]] = []
