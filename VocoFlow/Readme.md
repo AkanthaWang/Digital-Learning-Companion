@@ -19,9 +19,12 @@
 
 ## 🏗️ 系统架构
 
-语音输入(wav/mp3) → FunASR(语音识别) → DeepSeek-V3(文本生成) → IndexTTS2(语音合成) → 语音输出(wav)
+```
+语音输入(wav/mp3) → FunASR(语音识别) → DeepSeek-V3(文本生成) → EmotiVoice(语音合成) → 语音输出(wav)
                       ↓                      ↓                         ↓
                   中文文本              智能回复文本                音频波形
+```
+
 ---
 
 ## 📦 模块说明
@@ -80,17 +83,10 @@
 
 5. **下载 TTS 模型（EmotiVoice）**
 
-在首次运行前，请确保 EmotiVoice 模型已正确下载。  
-可参考详细安装说明与下载链接：
+   在首次运行前，请确保 EmotiVoice 模型已正确下载。  
+   可参考详细安装说明与下载链接：
 
-👉 [EmotiVoice/README.md](../../models/EmotiVoice/README.md)
-
-如未下载，可在本项目路径下执行：
-```bash
-cd models/EmotiVoice
-bash download_emotivoice.sh   # 或参考 README 中的手动下载方式
-cd ../../
-
+   👉 [EmotiVoice/README.md](../../models/EmotiVoice/README.md)
 
 6. **运行测试**
    ```bash
@@ -113,12 +109,14 @@ cd ../../
 项目的主要模块可通过 config/config.yaml 文件进行统一管理。  
 以下为核心配置示例：
 
+```yaml
 asr:
   provider: "funasr"
   model_name: "iic/speech_paraformer-large-vad-punc-spk_asr_nat-zh-cn"
   device: "cuda"
   sample_rate: 16000
-
+   ```
+```yaml
 llm:
   provider: "deepseek"
   deepseek:
@@ -127,7 +125,9 @@ llm:
     model: "DeepSeek/DeepSeek-V3"
     temperature: 0.7
     max_tokens: 2000
+   ```
 
+```yaml
 tts:
   provider: "emotivoice"
   device: "cuda"
@@ -137,7 +137,7 @@ tts:
   speed: 1.0
   pitch: 1.0
   model_path: "models/EmotiVoice/outputs"
-
+   ```
 ---
 
 ## 💡 常见问题 (FAQ)
