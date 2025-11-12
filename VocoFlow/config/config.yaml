@@ -56,8 +56,8 @@ tts:
 conversation:
   max_history: 10  # 最大对话历史轮数
   save_audio: true  # 是否保存音频
-  audio_output_dir: "data/audio_output"
-  audio_input_dir: "data/audio_input"
+  audio_output_dir: "yourproject/data/audio_output"
+  audio_input_dir: "yourproject/data/audio_input"
   log_dir: "data/logs"
   enable_vad: true  # 是否启用语音活动检测
   vad_threshold: 0.5
