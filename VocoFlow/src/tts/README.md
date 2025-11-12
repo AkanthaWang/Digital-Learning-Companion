@@ -102,7 +102,7 @@ tts = EmotiVoiceTTS(config)
 text = "你好，欢迎使用数字学伴。"
 
 # 方法 1：返回音频数据（numpy 数组）
-audio = tts.synthesize(text, voice="7556", emotion="友好的")
+audio = tts.synthesize(text, voice="1050", emotion="友好的")
 
 # 方法 2：直接合成并保存为文件
 tts.synthesize_to_file(
